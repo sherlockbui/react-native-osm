@@ -1,0 +1,67 @@
+{
+    "name": "react-native-osm",
+    "version": "1.0.0",
+    "description": "Cross-platform map component for React Native - OpenStreetMap for Android, Apple Maps for iOS. No Google Maps API key required!",
+    "main": "src/index.js",
+    "types": "src/index.d.ts",
+    "files": [
+        "src",
+        "assets",
+        "README.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "lint": "eslint .",
+        "typecheck": "tsc --noEmit",
+        "prepublishOnly": "echo 'Ready to publish!'"
+    },
+    "keywords": [
+        "react-native",
+        "maps",
+        "map",
+        "osm",
+        "openstreetmap",
+        "leaflet",
+        "ios",
+        "android",
+        "cross-platform",
+        "apple-maps",
+        "expo",
+        "location",
+        "marker",
+        "geolocation"
+    ],
+    "author": "sherlockbui",
+    "license": "MIT",
+    "homepage": "https://github.com/sherlockbui/react-native-osm#readme",
+    "bugs": {
+        "url": "https://github.com/sherlockbui/react-native-osm/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/sherlockbui/react-native-osm.git"
+    },
+    "peerDependencies": {
+        "react": ">=18.0.0",
+        "react-native": ">=0.71.0",
+        "expo-asset": ">=10.0.0",
+        "expo-file-system": ">=17.0.0",
+        "react-native-maps": ">=1.10.0",
+        "react-native-leaflet-view": ">=1.0.0",
+        "react-native-webview": ">=13.0.0"
+    },
+    "peerDependenciesMeta": {
+        "react-native-leaflet-view": {
+            "optional": true
+        },
+        "expo-asset": {
+            "optional": true
+        },
+        "expo-file-system": {
+            "optional": true
+        }
+    },
+    "engines": {
+        "node": ">=16.0.0"
+    }
+}
