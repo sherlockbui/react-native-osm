@@ -250,51 +250,53 @@ const PlatformMapView = ({
                 : DEFAULT_ANDROID_ZOOM;
 
     return (
-        <LeafletView
-            source={webViewContent ? { html: webViewContent } : undefined}
-            style={style}
-            mapCenterPosition={centerPosition}
-            zoom={leafletZoom}
-            mapMarkers={leafletMarkers}
-            zoomControl={zoomControlEnabled}
-            attributionControl={true}
-            onMessageReceived={message => {
-                try {
-                    // Handle marker click
-                    if (message?.event === 'onMapMarkerClicked') {
-                        const markerId = message?.payload?.markerId;
-                        if (markerId && originalMarkersRef.current[markerId]) {
-                            const originalMarker = originalMarkersRef.current[markerId];
-                            if (originalMarker.onPress) {
-                                originalMarker.onPress();
-                            } else if (originalMarker.callout?.onPress) {
-                                originalMarker.callout.onPress();
-                            } else if (onMarkerPress) {
-                                onMarkerPress(originalMarker);
+        <View style={[style, { overflow: 'hidden', position: 'relative' }]}>
+            <LeafletView
+                source={webViewContent ? { html: webViewContent } : undefined}
+                style={{ flex: 1, backgroundColor: '#f0f0f0' }}
+                mapCenterPosition={centerPosition}
+                zoom={leafletZoom}
+                mapMarkers={leafletMarkers}
+                zoomControl={zoomControlEnabled}
+                attributionControl={true}
+                onMessageReceived={message => {
+                    try {
+                        // Handle marker click
+                        if (message?.event === 'onMapMarkerClicked') {
+                            const markerId = message?.payload?.markerId;
+                            if (markerId && originalMarkersRef.current[markerId]) {
+                                const originalMarker = originalMarkersRef.current[markerId];
+                                if (originalMarker.onPress) {
+                                    originalMarker.onPress();
+                                } else if (originalMarker.callout?.onPress) {
+                                    originalMarker.callout.onPress();
+                                } else if (onMarkerPress) {
+                                    onMarkerPress(originalMarker);
+                                }
                             }
                         }
-                    }
-                    // Handle map move
-                    if (message?.event === 'onMapMoveEnd' && onRegionChangeComplete) {
-                        const { lat, lng } = message?.payload || {};
-                        if (lat && lng) {
-                            onRegionChangeComplete({
-                                latitude: lat,
-                                longitude: lng,
-                                latitudeDelta: region?.latitudeDelta || 0.07,
-                                longitudeDelta: region?.longitudeDelta || 0.07,
-                            });
+                        // Handle map move
+                        if (message?.event === 'onMapMoveEnd' && onRegionChangeComplete) {
+                            const { lat, lng } = message?.payload || {};
+                            if (lat && lng) {
+                                onRegionChangeComplete({
+                                    latitude: lat,
+                                    longitude: lng,
+                                    latitudeDelta: region?.latitudeDelta || 0.07,
+                                    longitudeDelta: region?.longitudeDelta || 0.07,
+                                });
+                            }
                         }
+                    } catch (error) {
+                        console.error(
+                            '[PlatformMapView] Error handling LeafletView message:',
+                            error?.message || error,
+                        );
                     }
-                } catch (error) {
-                    console.error(
-                        '[PlatformMapView] Error handling LeafletView message:',
-                        error?.message || error,
-                    );
-                }
-            }}
-            {...otherProps}
-        />
+                }}
+                {...otherProps}
+            />
+        </View>
     );
 };
 
