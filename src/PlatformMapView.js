@@ -96,12 +96,21 @@ const PlatformMapView = ({
                         throw new Error('Asset URI is not available after download');
                     }
 
-                    console.log('[PlatformMapView] HTML URI ready:', uri);
+                    console.log('[PlatformMapView] Reading HTML from URI:', uri);
+                    // Read the HTML content
+                    const htmlContent = await FileSystem.readAsStringAsync(uri);
+                    console.log(
+                        '[PlatformMapView] HTML content loaded, length:',
+                        htmlContent?.length,
+                    );
 
-                    // On Android, loading from file URI is better/faster than loading huge HTML string
-                    setWebViewContent(uri);
+                    if (!htmlContent || htmlContent.length === 0) {
+                        throw new Error('HTML content is empty after reading');
+                    }
+
+                    setWebViewContent(htmlContent);
                     setLoading(false);
-                    console.log('[PlatformMapView] HTML URI set to state successfully!');
+                    console.log('[PlatformMapView] HTML loaded successfully!');
                 } catch (error) {
                     console.error('[PlatformMapView] Error loading HTML:', error);
                     // Safely stringify error without circular references
@@ -241,9 +250,9 @@ const PlatformMapView = ({
                 : DEFAULT_ANDROID_ZOOM;
 
     return (
-        <View style={[style, { overflow: 'hidden', position: 'relative' }]}>
+        <View style={[style, { overflow: 'hidden' }]}>
             <LeafletView
-                source={webViewContent ? { uri: webViewContent } : undefined}
+                source={webViewContent ? { html: webViewContent } : undefined}
                 style={{ flex: 1, backgroundColor: '#f0f0f0' }}
                 mapCenterPosition={centerPosition}
                 zoom={leafletZoom}
